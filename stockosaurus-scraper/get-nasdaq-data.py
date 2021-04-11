@@ -12,6 +12,13 @@ def get_ticker_data(symbols, start, end):
 # create engine linked to stockosaurus-db on Postgresql
 engine = create_engine('postgresql://dev-admin:123!@localhost:5432/stockosaurus-db')
 
-# get ticker data as df and sql (edit ticker and sql table name here)
+# get ticker data as df, append ticker and convert to sql
 df = get_ticker_data(symbols='TSLA', start='01/01/2020', end='31/12/2020')
-sql = df.to_sql(name='TSLA_SQL_2020', con=engine)
+df['ticker'] = 'TSLA'#
+# df['id'] = [I for I in range(len(df))]
+df = df.reset_index()
+df.insert(loc=0, column='id', value=df.index)
+df.columns = map(str.lower, df.columns)
+df = df.set_index('id')
+# edit sql table name here
+sql = df.to_sql(name='stocks_nasdaqdaily', con=engine, if_exists='append')
