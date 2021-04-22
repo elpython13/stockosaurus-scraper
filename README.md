@@ -1,3 +1,3 @@
-# stockosaurus-api
+# stockosaurus-scraper
 
-yoyoyo
+python program to scrape ticker data from nasdaq
